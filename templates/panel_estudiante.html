@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Panel Estudiante</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background-image:
+                linear-gradient(
+                    rgba(0,0,0,0.45),
+                    rgba(0,0,0,0.45)
+                ),
+                url("{{ url_for('static', filename='img/fondo.jpg') }}");
+
+            background-size:cover;
+            background-position:center;
+            background-repeat:no-repeat;
+
+            display:flex;
+            justify-content:center;
+            align-items:flex-start;
+
+            padding:30px;
+        }
+
+        /* CONTENEDOR GLASS */
+        .glass-container{
+
+            width:100%;
+            max-width:1200px;
+
+            background:rgba(255,255,255,0.12);
+
+            backdrop-filter:blur(18px);
+            -webkit-backdrop-filter:blur(18px);
+
+            border:1px solid rgba(255,255,255,0.25);
+
+            border-radius:30px;
+
+            padding:40px;
+
+            box-shadow:0 8px 32px rgba(0,0,0,0.30);
+
+            color:white;
+        }
+
+        table{
+            color:white;
+        }
+
+        .table thead{
+            background:rgba(0,0,0,0.4);
+        }
+
+        .card{
+            background:rgba(255,255,255,0.10);
+            backdrop-filter:blur(10px);
+            border:1px solid rgba(255,255,255,0.15);
+            color:white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="glass-container">
+
+    <h1 class="text-center text-dark mb-4">
+        Bienvenido {{ estudiante[0] }} {{ estudiante[1] }}
+    </h1>
+
+    <p><strong>CI:</strong> {{ estudiante[2] }}</p>
+    <p><strong>Fecha de Ingreso:</strong> {{ estudiante[5] }}</p>
+    <p><strong>Curso:</strong> {{ estudiante[3] }} {{ estudiante[4] }}</p>
+
+    <hr>
+
+    <!-- MATERIAS -->
+    <h3>Materias y Profesores</h3>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Materia</th>
+                <th>Profesor</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for m in materias %}
+            <tr>
+                <td>{{ m[0] }}</td>
+                <td>{{ m[1] }} {{ m[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    <hr>
+
+    <!-- 1RA -->
+    <h3>1ra Evaluación</h3>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Materia</th>
+                <th>Examen</th>
+                <th>Práctica</th>
+                <th>Nota Final</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% if final_1 %}
+            {% for n in final_1 %}
+            <tr>
+                <td>{{ n[0] }}</td>
+                <td>{{ n[1] }}</td>
+                <td>{{ n[2] }}</td>
+                <td><strong>{{ n[3] }}</strong></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="4" class="text-center">Sin datos</td></tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <!-- 2DA -->
+    <h3 class="mt-4">2da Evaluación</h3>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Materia</th>
+                <th>Examen</th>
+                <th>Práctica</th>
+                <th>Nota Final</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% if final_2 %}
+            {% for n in final_2 %}
+            <tr>
+                <td>{{ n[0] }}</td>
+                <td>{{ n[1] }}</td>
+                <td>{{ n[2] }}</td>
+                <td><strong>{{ n[3] }}</strong></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="4" class="text-center">Sin datos</td></tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <!-- 3RA -->
+    <h3 class="mt-4">3ra Evaluación</h3>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Materia</th>
+                <th>Examen</th>
+                <th>Práctica</th>
+                <th>Nota Final</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% if final_3 %}
+            {% for n in final_3 %}
+            <tr>
+                <td>{{ n[0] }}</td>
+                <td>{{ n[1] }}</td>
+                <td>{{ n[2] }}</td>
+                <td><strong>{{ n[3] }}</strong></td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="4" class="text-center">Sin datos</td></tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- RESUMEN -->
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="card p-3 text-center">
+                <h4>Promedio General</h4>
+                {% if promedio %}
+                    <h2 class="text-warning">{{ promedio }}</h2>
+                {% else %}
+                    <h2>Sin notas</h2>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-3 text-center">
+                <h4>Estado</h4>
+
+                {% if estado == "APROBADO" %}
+                    <h2 class="text-success">{{ estado }}</h2>
+                {% elif estado == "REPROBADO" %}
+                    <h2 class="text-danger">{{ estado }}</h2>
+                {% else %}
+                    <h2>{{ estado }}</h2>
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
